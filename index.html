@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="screen-orientation" content="portrait">
+    <title>肯德基‘金猪扑满’</title>
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+    <script src="http://s0.qhimg.com/!249ce048/WeixinApi.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+    document.documentElement.style.fontSize = 100 * innerWidth / 750 + 'px';
+    addEventListener('load', function () {
+        setTimeout(function () {
+            document.documentElement.style.fontSize = 100 * innerWidth / 750 + 'px';
+            window.unit = 100 * innerWidth / 750;
+            var e = document.createEvent('Event');
+            e.initEvent('adjustReady', true, true);
+            window.dispatchEvent(e);
+        }, 480);
+    });
+    addEventListener('orientationchange', function () {
+        setTimeout(function () {
+            document.documentElement.style.fontSize = 100 * innerWidth / 750 + 'px'
+        }, 480)
+    });
+    </script>
+</head>
+<body>
+<!-- start page begin -->
+<div class="start-box">
+    <div class="curtain">
+        <img src="./static/img/curtain.png" alt="curtain">
+    </div>
+    <div class="stage">
+        <div class="stage-video-box">
+            <video controls="controls" autoplay="autoplay" src="static/test.mp4"></video>
+        </div>
+        <img src="./static/img/stage.png" alt="stag">
+    </div>
+    <div class="food-material">
+        <img src="./static/img/start-page-food-material.png" alt="materail">
+    </div>
+    <div class="start-ruler">
+        <img src="./static/img/btn-ruler.png" alt="ruler" class="ruler-btn">
+        <img src="./static/img/btn-start.png" alt="start" class="start-btn">
+    </div>
+    <div class="ruler-box">
+        <img src="./static/img/ruler.png" alt="ruler">
+    </div>
+</div>
+<!-- start page end-->
+<!-- game page begin -->
+<div class="game-box">
+    <div class="play-guide-panel"></div>
+    <div class="game-panel">
+        <div class="time-wrap"></div>
+        <div class="score-wrap">
+            <div class="heart"></div>
+            <span class="score">0</span>
+        </div>
+        <canvas id="stage-canvas" width="320" height="568"></canvas>
+    </div>
+    <div class="calculate-score-panel"></div>
+    <div class="result-panel">
+        <div class="result-score"></div>
+        <div class="result-button">
+            <div class="get-reward-button"></div>
+            <div class="replay-button"></div>
+        </div>
+    </div>
+</div>
+<!-- game page end -->
+<script src="static/js/zepto.min.js"></script>
+<script src="static/js/index.js"></script>
+</body>
+</html>
+        
