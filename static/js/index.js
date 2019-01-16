@@ -18,7 +18,7 @@ var gameMonitor = {
     bgSpeed: 2,
     bgloop: 0,
     score: 0,
-    im: new ImageMonitor(),
+    ImageMonitorInstance: new ImageMonitor(),
     foodList: [],
     bgDistance: 0, // 背景位置
     eventType: {
@@ -55,7 +55,7 @@ var gameMonitor = {
                 }
             }
         }, {passive: false})
-        body.on(gameMonitor.eventType.start, '.replay, .play-again', function () {
+        body.on(gameMonitor.eventType.start, '.play-again', function () {
             $('.result-panel').hide()
             var canvas = document.getElementById('stage-canvas')
             var ctx = canvas.getContext('2d')
@@ -78,16 +78,9 @@ var gameMonitor = {
         body.on(gameMonitor.eventType.start, '.play-guide-panel', function () {
             $(this).hide()
             _this.ship = new Ship(ctx)
-            _this.ship.paint()
+            _this.ship.countDown()
             _this.ship.controll()
             gameMonitor.run(ctx)
-        })
-        body.on(gameMonitor.eventType.start, '.share', function () {
-            $('.qrcode').css('display', 'inline-block')
-        })
-        body.on(gameMonitor.eventType.start, '.to-share', function () {
-            $('.qrcode').css('display', 'inline-block')
-            $('.qrcode').css('display', 'none')
         })
         WeixinApi.ready(function (Api) {
             // 微信分享的数据
@@ -142,8 +135,7 @@ var gameMonitor = {
         var _this = gameMonitor
         ctx.clearRect(0, 0, _this.bgWidth, _this.bgHeight)
         // _this.rollBg(ctx) 此处调用背景图滚动
-        // 绘制接素材容器
-        _this.ship.paint()
+        _this.ship.countDown()
         _this.ship.eat(_this.foodList)
         // 产生素材
         _this.genorateFood()
@@ -257,15 +249,21 @@ var gameMonitor = {
         return (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM || bIsWebview)
     }
 }
+if (!gameMonitor.isMobile()) {
+    gameMonitor.eventType.start = 'mousedown'
+    gameMonitor.eventType.move = 'mousemove'
+    gameMonitor.eventType.end = 'mouseup'
+}
 
+// 接物品容器
 function Ship (ctx) {
-    gameMonitor.im.loadImage(['static/img/bucket.png']) // 接素材容器
+    gameMonitor.ImageMonitorInstance.loadImage(['static/img/bucket.png'])
     this.width = 80
     this.height = 80
     this.left = (gameMonitor.w / 2 - this.width / 2) + 'px'
     this.top = (gameMonitor.h - 2 * this.height) + 'px'
-    this.player = gameMonitor.im.createImage('static/img/bucket.png') // 接素材容器
-    this.paint = function () {
+    this.player = gameMonitor.ImageMonitorInstance.createImage('static/img/bucket.png')
+    this.countDown = function () { // 绘制倒计时
         ctx.font = '20px Georgia'
         ctx.fillStyle = 'white'
         ctx.fillText(parseInt(35 - gameMonitor.time / 60), 25, 70)
@@ -275,8 +273,14 @@ function Ship (ctx) {
         var tarL = ''
         var tarT = ''
         if (gameMonitor.isMobile() && stopFlag === false) {
-            tarL = event.changedTouches[0].clientX
-            tarT = event.changedTouches[0].clientY
+            if (event) {
+                tarL = event.changedTouches[0].clientX
+                tarT = event.changedTouches[0].clientY
+            } else {
+                // 接素材容器开始默认位置
+                tarL = w / 2
+                tarT = h / 2
+            }
         } else {
             tarL = event.offsetX
             tarT = event.offsetY
@@ -296,12 +300,13 @@ function Ship (ctx) {
         //     this.top = gameMonitor.h - this.height
         // }
         this.top = gameMonitor.h - this.height - 30
-        this.paint()
+        this.countDown()
     }
     this.controll = function () {
         var _this = this
         var stage = $('.game-panel')
         var move = false
+        _this.setPosition()
         stage.on(gameMonitor.eventType.start, function (event) {
             _this.setPosition(event)
             move = true
@@ -360,28 +365,6 @@ function Ship (ctx) {
     }
 }
 
-function Food (type, left, id) { // 绘制素材图片
-    this.speedUpTime = 300
-    this.id = id
-    this.type = type
-    this.width = 50
-    this.height = 50
-    this.left = left
-    this.top = -50
-    this.speed = 0.04 * Math.pow(1.2, Math.floor(gameMonitor.time / this.speedUpTime))
-    this.loop = 0
-    var p
-    switch (this.type) { // 为素材种类添加图片
-        case 0:
-            p = 'static/img/pig-gold.png'
-            break
-        case 1:
-            p = 'static/img/pig-red.png'
-            break
-    }
-    this.pic = gameMonitor.im.createImage(p)
-}
-
 function ImageMonitor () {
     var imgArray = []
     return {
@@ -404,7 +387,29 @@ function ImageMonitor () {
     }
 }
 
-Food.prototype.paint = function (ctx) {
+function Food (type, left, id) { // 绘制素材图片
+    this.speedUpTime = 300
+    this.id = id
+    this.type = type
+    this.width = 50
+    this.height = 50
+    this.left = left
+    this.top = -50
+    this.speed = 0.04 * Math.pow(1.2, Math.floor(gameMonitor.time / this.speedUpTime))
+    this.loop = 0
+    var p
+    switch (this.type) { // 为素材种类添加图片
+        case 0:
+            p = 'static/img/pig-gold.png'
+            break
+        case 1:
+            p = 'static/img/pig-red.png'
+            break
+    }
+    this.pic = gameMonitor.ImageMonitorInstance.createImage(p)
+}
+
+Food.prototype.paint = function (ctx) { // 绘制食物
     ctx.drawImage(this.pic, this.left, this.top, this.width, this.height)
 }
 Food.prototype.move = function (ctx) {
@@ -417,11 +422,5 @@ Food.prototype.move = function (ctx) {
     } else {
         this.paint(ctx)
     }
-}
-
-if (!gameMonitor.isMobile()) {
-    gameMonitor.eventType.start = 'mousedown'
-    gameMonitor.eventType.move = 'mousemove'
-    gameMonitor.eventType.end = 'mouseup'
 }
 gameMonitor.init()
