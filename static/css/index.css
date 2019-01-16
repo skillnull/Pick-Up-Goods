@@ -81,28 +81,45 @@ html, body {
     width: 100%;
     z-index: 3;
     height: auto;
-    top: 6rem;
+    top: 5.5rem;
     left: 0;
 }
 
 .start-box .food-material img {
-    width: 94%;
+    width: 100%;
     height: auto;
 }
 
 .start-box .start-ruler {
     position: absolute;
     z-index: 3;
-    bottom: .4rem;
+    bottom: .1rem;
     width: 100%;
     height: auto;
     text-align: center;
 }
 
-.start-box .start-ruler img {
-    width: 40%;
-    display: inline-block;
+.start-box .start-ruler .start-btn-box {
+    width: 100%;
+    height: auto;
+}
+
+.start-box .start-ruler .start-btn-box img {
+    width: 50%;
+    height: auto;
     cursor: pointer;
+}
+
+.start-box .start-ruler .ruler-btn-box {
+    width: 100%;
+    height: auto;
+}
+
+.start-box .start-ruler .ruler-btn-box img {
+    width: 30%;
+    height: auto;
+    cursor: pointer;
+    vertical-align: text-top;
 }
 
 .start-box .ruler-box {
