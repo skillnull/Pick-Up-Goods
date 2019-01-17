@@ -2,7 +2,6 @@ var w = window.innerWidth || document.documentElement.clientWidth || document.bo
 var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
 var stopFlag = false
 $('.game-panel').css({'height': h, 'width': w})
-$('.start-box').css({'height': h, 'width': w})
 $('canvas').height(h).width(w)
 $('.start-btn').click(function () {
     $('.start-box').css('display', 'none')
