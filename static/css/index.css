@@ -25,9 +25,9 @@ html, body {
     background-image: url(../img/bg.jpg);
     background-repeat: no-repeat;
     background-size: 100%;
+    background-position: 100%;
     position: relative;
     z-index: 1;
-    display: block;
     width: 100%;
     height: 100%;
     overflow-y: auto;
@@ -41,7 +41,22 @@ html, body {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 6;
+}
+
+.start-box .curtain .video-box {
+    position: absolute;
+    margin: 32.3% 15.8%;
+    width: 67.3%;
+    height: auto;
+    z-index: 6;
+    top: 0;
+}
+
+.start-box .curtain .video-box video {
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
 }
 
 .start-box .curtain img {
@@ -61,20 +76,6 @@ html, body {
 .start-box .stage img {
     width: 100%;
     height: auto;
-}
-
-.start-box .stage .stage-video-box {
-    position: absolute;
-    margin: 32.3% 15.8%;
-    width: 67.3%;
-    height: auto;
-    z-index: 2;
-}
-
-.start-box .stage .stage-video-box video {
-    object-fit: fill;
-    width: 100%;
-    height: 100%;
 }
 
 .start-box .food-material {
@@ -124,12 +125,14 @@ html, body {
 }
 
 .start-box .ruler-box {
-    position: absolute;
-    z-index: 4;
-    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 9;
+    background-color: rgba(0, 0, 0, 0.8);
     width: 100%;
     height: 100%;
     display: none;
+    top: 0;
+    left: 0;
 }
 
 .start-box .ruler-box img {
