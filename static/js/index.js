@@ -1,6 +1,8 @@
 var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
 var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
 var stopFlag = false
+$('.game-box').css({'height': h, 'width': w})
+$('.start-box').css({'height': h, 'width': w})
 $('.game-panel').css({'height': h, 'width': w})
 $('canvas').height(h).width(w)
 $('.start-btn').click(function () {
@@ -86,18 +88,18 @@ var gameMonitor = {
             // 分享给好友的数据
             var wxData = {
                 'appId': '',
-                'imgUrl': 'static/img/icon.png',
-                'link': 'http://t.009v.com/wj/1026/index.html',
-                'desc': '苏皖肯德基',
-                'title': '“小食大作战”'
+                'imgUrl': 'static/img/pig-gold.png',
+                'link': 'http://www.skillnull.com',
+                'desc': 'KFC',
+                'title': '“金猪扑满”'
             }
             // 朋友圈数据
             var wxDataPyq = {
                 'appId': '',
-                'imgUrl': 'static/img/icon.png',
-                'link': 'http://t.009v.com/wj/1026/index.html',
-                'desc': '“苏皖肯德基”',
-                'title': '小食大作战'
+                'imgUrl': 'static/img/pig-gold.png',
+                'link': 'http://www.skillnull.com',
+                'desc': '“KFC”',
+                'title': '金猪扑满'
             }
             // 分享的回调
             var wxCallbacks = {
@@ -194,25 +196,33 @@ var gameMonitor = {
         var time = Math.floor(this.time / 60)
         var score = this.score
         var resultImg = new Image()
+        var resultLink = ''
         if (score < 22) {
             $('.result-score').html('真遗憾，您得分低于22分')
             $('.get-reward-button').text('大侠请重新来过').removeClass('share').addClass('play-again')
             return
         } else if (score >= 22 && score < 26) {
             resultImg.src = 'static/img/22-25.png'
+            resultLink = 'http://www.baidu.com'
         } else if (score >= 26 && score < 36) {
             resultImg.src = 'static/img/26-35.png'
+            resultLink = 'http://www.baidu.com'
         } else if (score >= 36 && score < 46) {
             resultImg.src = 'static/img/36-45.png'
+            resultLink = 'http://www.baidu.com'
         } else if (score >= 46 && score < 51) {
             resultImg.src = 'static/img/46-50.png'
+            resultLink = 'http://www.baidu.com'
         } else if (score >= 51 && score < 56) {
             resultImg.src = 'static/img/51-55.png'
+            resultLink = 'http://www.baidu.com'
         } else if (score >= 56 && score < 88) {
             // 这个区间没有给图
             resultImg.src = 'static/img/51-55.png'
+            resultLink = 'http://www.baidu.com'
         } else {
             resultImg.src = 'static/img/88.png'
+            resultLink = 'http://www.baidu.com'
         }
         var dom = document.getElementsByClassName('result-score')[0]
         dom.appendChild(resultImg)
@@ -222,7 +232,7 @@ var gameMonitor = {
         getRewardButtonDom.appendChild(getRewardBtn)
         $('.get-reward-button').removeClass('play-again')
         $('.get-reward-button').click(function () {
-            window.location.href = 'http://www.baidu.com'
+            window.location.href = resultLink
         })
         if (score >= 22) {
             var replayBtnImg = new Image()

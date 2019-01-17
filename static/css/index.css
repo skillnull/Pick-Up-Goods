@@ -34,20 +34,6 @@ html, body {
     -webkit-overflow-scrolling: touch;
 }
 
-.start-box .stage-video-box {
-    position: absolute;
-    margin: 32.3% 15.8%;
-    width: 67.3%;
-    height: 27.3%;
-    z-index: 2;
-}
-
-.start-box .stage-video-box video {
-    object-fit: fill;
-    width: 100%;
-    height: 100%;
-}
-
 .start-box .curtain {
     width: 100%;
     padding: 0;
@@ -65,8 +51,8 @@ html, body {
 
 .start-box .stage {
     width: 100%;
-    height: auto;
-    position: absolute;
+    height: 100%;
+    position: relative;
     top: 0;
     left: 0;
     z-index: 2;
@@ -75,6 +61,20 @@ html, body {
 .start-box .stage img {
     width: 100%;
     height: auto;
+}
+
+.start-box .stage .stage-video-box {
+    position: absolute;
+    margin: 32.3% 15.8%;
+    width: 67.3%;
+    height: auto;
+    z-index: 2;
+}
+
+.start-box .stage .stage-video-box video {
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
 }
 
 .start-box .food-material {
@@ -143,9 +143,21 @@ html, body {
 
 .game-box {
     width: 100%;
+    height: 100%;
     position: relative;
     overflow: hidden;
-    display: none
+    display: none;
+    top: 0;
+    left: 0;
+}
+
+.game-box .game-play-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
 }
 
 .game-box .play-guide-panel {
@@ -156,15 +168,17 @@ html, body {
     position: absolute;
     top: 0;
     width: 100%;
-    z-index: 10000
+    z-index: 5;
 }
 
 .game-box .game-panel {
-    width: 320px;
-    margin: 0 auto;
-    height: 568px;
-    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
     overflow: hidden;
+    z-index: 4;
 }
 
 .game-box .game-panel .score-wrap {
@@ -184,7 +198,7 @@ html, body {
     top: 10px;
     right: 10px;
     width: 105px;
-    z-index: 1005
+    z-index: 4;
 }
 
 .game-box .game-panel .score-wrap .heart {
@@ -195,7 +209,7 @@ html, body {
     position: absolute;
     top: 2px;
     width: 26px;
-    z-index: 1009
+    z-index: 4
 }
 
 .game-box .game-panel .score-wrap .hearthot {
@@ -219,15 +233,7 @@ html, body {
     text-align: center;
     text-shadow: 1.5px 0 0 #613209, -1.5px 0 0 #613209, 0 1px 0 #613209, 0 -1.5px 0 #613209, 1px 1px 0 #613209, -1px 1px 0 #613209, 1px -1px 0 #613209, -1px -1px 0 #613209;
     width: 50px;
-    z-index: 2005
-}
-
-.game-box .game-panel #stage-canvas {
-    background-image: url("../img/game-play-bg.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    -webkit-background-size: 100%;
-    background-size: 100%;
+    z-index: 4
 }
 
 .game-box .calculate-score-panel {
@@ -238,7 +244,7 @@ html, body {
     height: 100%;
     position: absolute;
     width: 100%;
-    z-index: 10000;
+    z-index: 5;
 }
 
 .game-box .result-panel {
@@ -248,26 +254,27 @@ html, body {
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 101;
+    z-index: 5;
     background-image: url(../img/result-bg.png);
     background-repeat: no-repeat;
     background-size: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    background-position: center;
+    background-position: center 40%;
     top: 0;
     left: 0;
 }
 
 .game-box .result-panel .result-score {
+    text-align: center;
+    position: relative;
+    top: 33%;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 16px;
     font-weight: 700;
-    color: #FFF;
-    text-align: center;
-    line-height: 1.8em;
-    position: relative;
-    top: 53%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    color: white;
+    height: 4rem;
+    line-height: 4rem;
 }
 
 .game-box .result-panel .result-score img {
@@ -276,20 +283,21 @@ html, body {
 }
 
 .game-box .result-panel .result-button {
-    text-align: center;
     width: 100%;
     height: 100%;
+    position: absolute;
+    z-index: 6;
+    top: 0;
+    left: 0;
 }
 
 .game-box .result-panel .result-button .get-reward-button {
     position: absolute;
-    top: 75%;
+    top: 70%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     display: inline-block;
-    width: 196px;
-    height: 54px;
-    line-height: 54px;
+    width: 100%;
     color: #FFF;
     font-size: 20px;
     border-radius: 5px;
@@ -303,21 +311,19 @@ html, body {
 
 .game-box .result-panel .result-button .replay-button {
     display: inline-block;
-    width: 196px;
-    height: 54px;
-    line-height: 54px;
+    width: 100%;
     color: #FFF;
     font-size: 20px;
     border-radius: 5px;
     text-align: center;
     position: absolute;
-    top: 86%;
+    top: 83%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
 }
 
 .game-box .result-panel .result-button .replay-button img {
-    width: 4rem;
+    width: 5.5rem;
     height: auto;
 }
 
