@@ -24,26 +24,14 @@
         }, 480)
     });
     </script>
-    <script>
-    var first = true;
-    var video = document.getElementById("start-page-video");
-    video && video.addEventListener('canplay', function () {
-        if (first) {
-            video.muted = false;
-            video.play();
-            first = false;
-        }
-    });
-    </script>
 </head>
 <body>
 <!-- start page begin -->
 <div class="start-box">
     <div class="curtain">
         <img src="./static/img/curtain.png" alt="curtain">
-        <div class="video-box">
-            <video controls="controls" autoplay="autoplay" webkit-playsinline
-                   src="static/test.mp4" id="start-page-video" poster="static/img/video-first-image.jpg"></video>
+        <div class="gif-box">
+            <img src="./static/img/startGIF.gif">
         </div>
     </div>
     <div class="stage">
