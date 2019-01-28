@@ -44,7 +44,7 @@ var MethodsLibrary = {
             $('.result-panel').hide()
             GlobalData.stopFlag = false
             _this.reset()
-            _this.run(stageCTX)
+            _this.run(CTX)
         })
         body.on(GlobalData.eventType.start, '#frontpage', function () {
             $('#frontpage').css('left', '-100%')
@@ -114,7 +114,6 @@ var MethodsLibrary = {
                 confirm: function (resp) {
                 },
                 all: function (resp) {
-                    // location.href=location.href
                 }
             }
             // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
@@ -151,47 +150,47 @@ var MethodsLibrary = {
     Vessel: function (ctx) {
         this.vesselWidth = 80
         this.vesselHeight = 80
-        this.left = (GlobalData.clientWidth / 2 - this.vesselWidth / 2) + 'px'
-        this.top = (GlobalData.clientHeight - 2 * this.vesselHeight) + 'px'
+        this.marginLeft = (GlobalData.clientWidth / 2 - this.vesselWidth / 2) + 'px'
+        this.marginTop = (GlobalData.clientHeight - 2 * this.vesselHeight) + 'px'
         // 绘制容器
         this.initVessel = function () {
             var imageMonitor = new MethodsLibrary.ImageMonitor()
             imageMonitor.loadImage(['static/img/bucket.png'])
             this.player = imageMonitor.createImage('static/img/bucket.png')
-            ctx.drawImage(this.player, this.left, this.top, this.vesselWidth, this.vesselHeight)
+            ctx.drawImage(this.player, this.marginLeft, this.marginTop, this.vesselWidth, this.vesselHeight)
         }
         // 设置容器当前位置
         this.setVesselPosition = function (event) {
-            var tarL = ''
-            var tarT = ''
+            var xAxis = ''
+            var yAxis = ''
             if (MethodsLibrary.isMobile() && GlobalData.stopFlag === false) {
                 if (event) {
-                    tarL = event.changedTouches[0].clientX
-                    tarT = event.changedTouches[0].clientY
+                    xAxis = event.changedTouches[0].clientX
+                    yAxis = event.changedTouches[0].clientY
                 } else {
                     // 接素材容器开始默认位置
-                    tarL = GlobalData.clientWidth / 2
-                    tarT = GlobalData.clientHeight / 2
+                    xAxis = GlobalData.clientWidth / 2
+                    yAxis = GlobalData.clientHeight / 2
                 }
             } else {
-                tarL = event.offsetX
-                tarT = event.offsetY
+                xAxis = event.offsetX
+                yAxis = event.offsetY
             }
-            this.left = tarL - this.vesselWidth / 2
-            this.top = tarT - this.vesselHeight / 2
-            if (this.left < 0) {
-                this.left = 0
+            this.marginLeft = xAxis - this.vesselWidth / 2
+            this.marginTop = yAxis - this.vesselHeight / 2
+            if (this.marginLeft < 0) {
+                this.marginLeft = 0
             }
-            if (this.left > GlobalData.clientWidth - this.vesselWidth) {
-                this.left = GlobalData.clientWidth - this.vesselWidth
+            if (this.marginLeft > GlobalData.clientWidth - this.vesselWidth) {
+                this.marginLeft = GlobalData.clientWidth - this.vesselWidth
             }
-            // if (this.top < 0) {
-            //     this.top = 0
+            // if (this.marginTop < 0) {
+            //     this.marginTop = 0
             // }
-            // if (this.top > GlobalData.clientHeight - this.vesselHeight) {
-            //     this.top = GlobalData.clientHeight - this.vesselHeight
+            // if (this.marginTop > GlobalData.clientHeight - this.vesselHeight) {
+            //     this.marginTop = GlobalData.clientHeight - this.vesselHeight
             // }
-            this.top = GlobalData.clientHeight - this.vesselHeight - 30
+            this.marginTop = GlobalData.clientHeight - this.vesselHeight - 30
         }
         // 操作容器
         this.operateVessel = function () {
@@ -216,11 +215,11 @@ var MethodsLibrary = {
             for (var i = materialList.length - 1; i >= 0; i--) {
                 var item = materialList[i]
                 if (item) {
-                    var l1 = this.top + this.vesselHeight / 2 - (item.top + item.height / 2)
-                    var l2 = this.left + this.vesselWidth / 2 - (item.left + item.width / 2)
+                    var l1 = this.marginTop + this.vesselHeight / 2 - (item.materialMarginTop + item.materialHeight / 2)
+                    var l2 = this.marginLeft + this.vesselWidth / 2 - (item.materialMarginLeft + item.materialWidth / 2)
                     var l3 = Math.sqrt(l1 * l1 + l2 * l2)
-                    if (l3 <= this.vesselHeight / 2 + item.height / 2) {
-                        materialList[item.id] = null
+                    if (l3 <= this.vesselHeight / 2 + item.materialHeight / 2) {
+                        materialList[item.materialId] = null
                         // if (item.type == '炸弹之类的需要停止游戏的素材，则停止游戏') {
                         //     GlobalData.stopFlag = true
                         //     MethodsLibrary.stop()
@@ -237,7 +236,7 @@ var MethodsLibrary = {
                         //         $('.heart').removeClass('hearthot')
                         //     }, 200)
                         // }
-                        switch (item.type) { // 素材分值
+                        switch (item.materialType) { // 素材分值
                             case 0:
                                 GlobalData.score = GlobalData.score + 2
                                 break
@@ -256,38 +255,38 @@ var MethodsLibrary = {
         }
     },
     // 素材生成构造函数
-    Material: function (type, left, id) { // 绘制素材图片
+    Material: function (materialType, marginLeft, materialId) {
         var _this = this
         _this.speedUpTime = 300
-        _this.id = id
-        _this.type = type
-        _this.width = 50
-        _this.height = 50
-        _this.left = left
-        _this.top = -50
+        _this.materialId = materialId
+        _this.materialType = materialType
+        _this.materialWidth = 50
+        _this.materialHeight = 50
+        _this.materialMarginLeft = marginLeft
+        _this.materialMarginTop = -50
         _this.speed = 0.04 * Math.pow(1.2, Math.floor(GlobalData.time / this.speedUpTime))
         _this.loop = 0
-        var materialItem
-        switch (_this.type) { // 为素材种类添加图片
+        var materialItemSrc
+        switch (_this.materialType) { // 为素材种类添加图片
             case 0:
-                materialItem = 'static/img/pig-gold.png'
+                materialItemSrc = 'static/img/pig-gold.png'
                 break
             case 1:
-                materialItem = 'static/img/pig-red.png'
+                materialItemSrc = 'static/img/pig-red.png'
                 break
         }
         var imageMonitor = new MethodsLibrary.ImageMonitor()
-        _this.pic = imageMonitor.createImage(materialItem)
+        _this.materialItem = imageMonitor.createImage(materialItemSrc)
         MethodsLibrary.Material.prototype.paint = function (ctx) { // 绘制食物
-            ctx.drawImage(this.pic, this.left, this.top, this.width, this.height)
+            ctx.drawImage(this.materialItem, this.materialMarginLeft, this.materialMarginTop, this.materialWidth, this.materialHeight)
         }
         MethodsLibrary.Material.prototype.move = function (ctx) {
             if (GlobalData.time % this.speedUpTime === 0) {
                 this.speed *= 1.4
             }
-            this.top += ++this.loop * this.speed
-            if (this.top > GlobalData.clientHeight) {
-                GlobalData.materialList[this.id] = null
+            this.materialMarginTop += ++this.loop * this.speed
+            if (this.materialMarginTop > GlobalData.clientHeight) {
+                GlobalData.materialList[this.materialId] = null
             } else {
                 this.paint(ctx)
             }
@@ -353,10 +352,10 @@ var MethodsLibrary = {
         var genRate = 50 // 产生下落素材的频率
         var random = Math.random()
         if (random * genRate > genRate - 1) {
-            var left = Math.random() * (GlobalData.clientWidth - 50)
-            var type = Math.floor(Math.random() * 2) // 产生素材种类数量
-            var id = GlobalData.materialList.length
-            var material = new MethodsLibrary.Material(type, left, id)
+            var marginLeft = Math.random() * (GlobalData.clientWidth - 50)
+            var materialType = Math.floor(Math.random() * 2) // 产生素材种类数量
+            var materialId = GlobalData.materialList.length
+            var material = new MethodsLibrary.Material(materialType, marginLeft, materialId)
             GlobalData.materialList.push(material)
         }
     },
@@ -374,26 +373,25 @@ var MethodsLibrary = {
             return
         } else if (score >= 22 && score < 26) {
             resultImg.src = 'static/img/22-25.png'
-            resultLink = 'http://www.baidu.com'
+            resultLink = 'http://www.skillnull.com'
         } else if (score >= 26 && score < 36) {
             resultImg.src = 'static/img/26-35.png'
-            resultLink = 'http://www.baidu.com'
+            resultLink = 'http://www.skillnull.com'
         } else if (score >= 36 && score < 46) {
             resultImg.src = 'static/img/36-45.png'
-            resultLink = 'http://www.baidu.com'
+            resultLink = 'http://www.skillnull.com'
         } else if (score >= 46 && score < 51) {
             resultImg.src = 'static/img/46-50.png'
-            resultLink = 'http://www.baidu.com'
+            resultLink = 'http://www.skillnull.com'
         } else if (score >= 51 && score < 56) {
             resultImg.src = 'static/img/51-55.png'
-            resultLink = 'http://www.baidu.com'
+            resultLink = 'http://www.skillnull.com'
         } else if (score >= 56 && score < 88) {
-            // 这个区间没有给图
             resultImg.src = 'static/img/51-55.png'
-            resultLink = 'http://www.baidu.com'
+            resultLink = 'http://www.skillnull.com'
         } else {
             resultImg.src = 'static/img/88.png'
-            resultLink = 'http://www.baidu.com'
+            resultLink = 'http://www.skillnull.com'
         }
         var dom = document.getElementsByClassName('result-score')[0]
         dom.appendChild(resultImg)
@@ -445,5 +443,5 @@ var MethodsLibrary = {
     //     ctx.drawImage(this.bg, 0, this.bgDistance, this.bgWidth, this.bgHeight)
     // }
 }
-
+// 初始化
 MethodsLibrary.init()
